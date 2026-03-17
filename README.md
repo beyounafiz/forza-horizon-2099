@@ -1,34 +1,10 @@
-# 🚗 Forza Horizon 2099
+# Forza Horizon 2099
 
 > An interactive OpenGL car racing game — CSE422 Computer Graphics Lab Project
-
-**Daffodil International University**
-Department of Computer Science and Engineering (CSE)
-Spring 2026
-
----
-
-## 📋 Table of Contents
-
-- [About the Project](#about-the-project)
-- [Game Preview](#game-preview)
-- [Team](#team)
-- [Progress Status](#progress-status)
-- [Graphics Algorithms](#graphics-algorithms)
-- [2D Transformations](#2d-transformations)
-- [Animations](#animations)
-- [Controls](#controls)
-- [Build & Run](#build--run)
-- [Project Structure](#project-structure)
-- [Course Mapping](#course-mapping)
-
----
 
 ## About the Project
 
 **Forza Horizon 2099** is a top-down, 2D, real-time car avoidance game built entirely with **C++ and OpenGL (FreeGLUT)**. The player controls a red sports car on a three-lane highway and must dodge three oncoming enemy cars for as long as possible. The score increases continuously while the game runs, and difficulty scales through five levels as enemy cars get progressively faster.
-
-The project is designed to apply all core topics from CSE422 — Computer Graphics Lab in one cohesive system: output primitives, line and circle drawing algorithms, 2D geometric transformations, and real-time animation.
 
 ### Key Features
 - Three-lane highway with real-time scrolling road markings
@@ -38,59 +14,6 @@ The project is designed to apply all core topics from CSE422 — Computer Graphi
 - Full game state machine: Start → Play → Pause → Game Over → Restart
 - HUD overlay: score counter, lives (heart icons), level indicator
 - Moving clouds and decorative side trees for environmental depth
-
----
-
-## Game Preview
-
-```
-┌─────────────────────────────────────────────────┐
-│  [SCORE: 000420]     [LVL 2]    [LIVES: ♥ ♥ ♥] │
-│                                                   │
-│     ☁                    ☁              ☁        │
-│  🌲      🌲                      🌲      🌲      │
-│     |  [BLUE CAR]  |              | [YELLOW] |    │
-│     |      - - - - | - - -        |    - - - |    │
-│     |              |  [GREEN]     |          |    │
-│     |      - - - - | - - -        |    - - - |    │
-│     |              | [PLAYER CAR] |          |    │
-│     |   Lane 0     |   Lane 1     |  Lane 2  |    │
-└─────────────────────────────────────────────────┘
-```
-
----
-
-## Team
-
-| # | Name | Student ID | Module |
-|---|------|------------|--------|
-| 1 | Safayet Hossain Nahin | 0242220005101569 | Background Scene |
-| 2 | Shoeb Akter Nafiz | 0242220005101898 | Player Car |
-| 3 | Sumaiya Rahman Moon | 0242220005101589 | Enemy Cars |
-| 4 | Ridita Sultana | 0242220005101594 | HUD & UI Screens |
-| 5 | Refat Pasha | 0242220005101568 | Collision & Game Logic |
-
-
----
-fade timing and restart bug in progress |
-
-### What's Done
-- Full background scene (sky, road, scrolling DDA dashes, clouds, trees)
-- Complete player car with Midpoint Circle wheel outlines
-- All three enemy cars with Bresenham outlines and level-based speed
-- Smooth player lane-change (lerp + rotation tilt)
-- Score counter, lives hearts, level indicator, start screen, pause overlay
-- AABB collision detection, invincibility timer, particle spawning
-
-### What's In Progress
-- Explosion particle fade-out timing (decay curve being adjusted)
-- Game Over screen visual polish
-- Enemy lane assignment bug on restart (`rand()%3` stacking fix)
-- HUD panel alpha values on Mac displays
-
-### What's Planned
-- Level-up flash visual feedback
-- Swept-AABB check at high speeds (level 5)
 
 ---
 
@@ -128,7 +51,6 @@ glVertex2f(cx+rx,cy-ry); glVertex2f(cx-rx,cy-ry);
 glVertex2f(cx+ry,cy+rx); glVertex2f(cx-ry,cy+rx);
 glVertex2f(cx+ry,cy-rx); glVertex2f(cx-ry,cy-rx);
 ```
-
 ---
 
 ## 2D Transformations
@@ -151,7 +73,6 @@ glPushMatrix();
     // draw particle square
 glPopMatrix();
 ```
-
 ---
 
 ## Animations
@@ -183,13 +104,7 @@ All animation is driven by `glutTimerFunc(16ms)` — approximately 60 fps.
 
 ## Build & Run
 
-### Mac — Terminal (recommended for quick testing)
-```bash
-g++ main.cpp -framework OpenGL -framework GLUT -Wno-deprecated-declarations -o game
-./game
-```
-
-### Mac — Code::Blocks
+### Code::Blocks
 1. Open Code::Blocks → **File → New → Empty Project**
 2. Right-click project → **Add files** → select `main.cpp`
 3. Go to **Project → Build Options → Linker Settings**
@@ -204,11 +119,6 @@ Add this to **Compiler flags**:
 ```
 -Wno-deprecated-declarations
 ```
-
-### Requirements
-- macOS with Xcode Command Line Tools installed
-- OpenGL and GLUT are pre-installed on all Macs — no extra libraries needed
-
 ---
 
 ## Project Structure
@@ -220,21 +130,6 @@ forza-horizon-2099/
 ├── README.md         ← this file
 └── .gitignore        ← ignores compiled binaries and IDE files
 ```
-
----
-
-## Course Mapping
-
-| Criterion | Marks | How This Project Addresses It |
-|-----------|-------|-------------------------------|
-| **EP1** — Graphics Complexity & Algorithm Usage | 8 | DDA, Bresenham, Midpoint Circle all implemented manually with visible output |
-| **EP3** — Analysis & Logical Structure | 8 | AABB collision analysis, transformation sequences, modular code structure |
-| **EP5** — Application of Graphics Codes | 8 | All three algorithms in use, all 2D transforms applied, `glPushMatrix`/`glPopMatrix` throughout |
-| **EA1 + EA3** — Documentation & Presentation | 16 | Project report, README, source code, viva preparation |
-| **Total** | **40** | |
-
-**Course Outcomes addressed:** CO2 (Apply OpenGL tools), CO3 (Team performance), CO4 (Project creation and communication)
-
 ---
 
 *CSE422 Computer Graphics Lab — Spring 2026 — Daffodil International University*

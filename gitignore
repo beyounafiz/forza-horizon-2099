@@ -1,0 +1,15 @@
+# Compiled binaries
+game
+*.exe
+*.o
+*.out
+
+# Code::Blocks project files
+*.cbp
+*.layout
+*.depend
+bin/
+obj/
+
+# macOS
+.DS_Store

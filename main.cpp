@@ -557,19 +557,29 @@ void drawGameOverScreen(int fs)
 
 /* ================================================================
    MEMBER 5 - GAME LOGIC & COLLISION
-   STATUS: ~40% COMPLETE
-   DONE    : AABB collision detection triggers correctly
-             Invincibility timer prevents rapid re-hits
-             Particle spawning and outward movement working
-             Game state machine (START->PLAY->PAUSE->OVER) functional
-   IN PROG : Explosion particle fade-out timing feels abrupt (decay
-             constant 0.032 collapses scale before colour fade ends)
-   IN PROG : Restart flow: enemies occasionally stack at same y on
-             initGame() due to rand()%3 returning same lane twice
-   PLANNED : Level-up flash visual feedback
-   PLANNED : Swept-AABB check at level 5 high speeds
-   ================================================================ */
+   STATUS: ~70% COMPLETE
 
+   COMPLETED FEATURES:
+   - Implemented AABB (Axis-Aligned Bounding Box) collision detection
+     for efficient and accurate player-enemy interaction.
+   - Added invincibility timer to prevent multiple rapid collisions
+     within a short time frame.
+   - Developed particle-based explosion system with directional
+     movement and basic physics (velocity and gravity).
+   - Designed and implemented a game state machine controlling
+     transitions between START, PLAY, PAUSE, and GAME OVER states.
+
+   CURRENT IMPROVEMENTS:
+   - Explosion animation refined with smoother life decay and
+     improved color fading for better visual quality.
+   - Restart logic enhanced to ensure enemies spawn in unique lanes
+     with proper vertical spacing, preventing overlap issues.
+
+   FUTURE ENHANCEMENTS (PLANNED):
+   - Level-up visual feedback (e.g., screen flash or animation).
+   - Advanced collision handling (Swept-AABB) for high-speed accuracy.
+
+   ================================================================ */
 int invincibleTimer = 0;
 
 typedef struct { float x,y,vx,vy,life,r,g,b,sz,angle,rotSpd; } Particle;
@@ -598,35 +608,46 @@ void spawnExplosion(float ex,float ey)
 
 void drawExplosion(void)
 {
-    /*
-     *  Each particle uses all three 2D transforms per frame (EP5):
-     *  glTranslatef - fly to current position
-     *  glRotatef    - spin around Z-axis (angle += rotSpd each frame)
-     *  glScalef     - shrink as life fades from 1.0 to 0.0
-     *  TODO: fade timing is abrupt - decay constant being adjusted (IN PROG)
-     */
     int i, any=0;
     if(!explosionActive) return;
+
     for(i=0;i<22;i++){
         float lf=particles[i].life;
         if(lf<=0) continue;
+
         any=1;
+
         particles[i].x    += particles[i].vx;
         particles[i].y    += particles[i].vy;
-        particles[i].vy   -= 0.012f;           /* gravity */
-        particles[i].life -= 0.032f;           /* TODO: tune this decay (IN PROG) */
-        particles[i].angle+= particles[i].rotSpd;
-        glColor3f(particles[i].r*lf, particles[i].g*lf*0.5f, 0);
+        particles[i].vy   -= 0.010f;        /* slightly softer gravity */
+
+
+        particles[i].life -= 0.015f;
+
+        if(particles[i].life < 0) particles[i].life = 0;
+
+        particles[i].angle += particles[i].rotSpd;
+
+
+        glColor3f(particles[i].r * lf,
+                  particles[i].g * lf * 0.7f,
+                  0);
+
         glPushMatrix();
-        glTranslatef(particles[i].x,particles[i].y,0);       /* Translation (EP5) */
-        glRotatef(particles[i].angle,0,0,1);                 /* Rotation    (EP5) */
-        glScalef(particles[i].sz*lf,particles[i].sz*lf,1);  /* Scaling     (EP5) */
+        glTranslatef(particles[i].x,particles[i].y,0);
+        glRotatef(particles[i].angle,0,0,1);
+        glScalef(particles[i].sz * lf,particles[i].sz * lf,1);
+
         glBegin(GL_QUADS);
-            glVertex2f(-0.5f,-0.5f); glVertex2f(0.5f,-0.5f);
-            glVertex2f( 0.5f, 0.5f); glVertex2f(-0.5f,0.5f);
+            glVertex2f(-0.5f,-0.5f);
+            glVertex2f( 0.5f,-0.5f);
+            glVertex2f( 0.5f, 0.5f);
+            glVertex2f(-0.5f, 0.5f);
         glEnd();
+
         glPopMatrix();
     }
+
     if(!any) explosionActive=0;
 }
 
@@ -665,10 +686,36 @@ void checkCollisions(void)
 void initGame(void)
 {
     int i;
-    score=0; lives=3; level=1; invincibleTimer=0; explosionActive=0;
+    score=0;
+    lives=3;
+    level=1;
+    invincibleTimer=0;
+    explosionActive=0;
+
     for(i=0;i<22;i++) particles[i].life=0;
+
     initPlayerCar();
-    initEnemyCars();  /* TODO: ensure distinct lanes on restart - IN PROG */
+
+
+    int used[3] = {0,0,0};
+
+    for(i=0;i<3;i++){
+        int lane;
+        do {
+            lane = rand()%3;
+        } while(used[lane]);
+
+        used[lane] = 1;
+
+        enemies[i].lane = lane;
+        enemies[i].x    = laneX[lane];
+
+        enemies[i].y    = 50.0f + i * 20.0f;   /* spaced vertically */
+        enemies[i].speed= 0.18f + (float)(rand()%22)/100.0f;
+
+        enemies[i].active = 1;
+    }
+
     initBackground();
 }
 

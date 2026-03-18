@@ -553,6 +553,7 @@ void drawGameOverScreen(int fs)
     glColor3f(0.9f,0.9f,0.9f); renderText(-13.5f,3,"Press R   to Restart",GLUT_BITMAP_HELVETICA_18);
     renderText(-12,-1.5f,"Press ESC to Quit",GLUT_BITMAP_HELVETICA_12);
     /* TODO: add animated score tally effect - PLANNED */
+    //remaining task
 }
 
 /* ================================================================

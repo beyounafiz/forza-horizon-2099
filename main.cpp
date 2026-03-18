@@ -314,7 +314,7 @@ void updatePlayerCar(void)
 }
 
 /* ================================================================
-   MEMBER 3 - ENEMY CARS
+   MEMBER 3 - ENEMY CARS. Moons Part yahooooooooooo
    STATUS: COMPLETE
    Three opponents per lane, Bresenham outlines, level-based speed
    ================================================================ */
@@ -326,7 +326,7 @@ EnemyCar enemies[3];
  *  BRESENHAM LINE ALGORITHM  (EP5 - Course Requirement)
  *  Uses integer error term (err = dx - dy) to decide each step.
  *  If e2 > -dy: advance in x. If e2 < dx: advance in y.
- *  No floating-point division Ñ pure integer arithmetic.
+ *  No floating-point division ï¿½ pure integer arithmetic.
  *  Used to draw the 4 edge outlines of each enemy car body.
  */
 void bresenhamLine(int x1,int y1,int x2,int y2)
